@@ -1,6 +1,8 @@
 # !/bin/sh
-export GOPATH=$(pwd)
 GOQT_PATH=github.com/visualfc/goqt
+CWD=$(pwd)
+
+cd $GOPATH
 go get $GOQT_PATH
 cd src/$GOQT_PATH
 
@@ -15,4 +17,10 @@ make
 cd ../..
 
 cd ui
-go install -v
+CGO_ENABLED=1 go install -v
+
+cd $GOPATH
+cp -R src/$GOQT_PATH/bin $CWD
+
+cd $CWD/bpcs
+go build -ldflags "-r ." -o ../bin/stegano-bpcs
