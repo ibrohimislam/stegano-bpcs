@@ -1,2 +1,2 @@
-src
-pkg
+bin/*
+qtdrv/*.o
