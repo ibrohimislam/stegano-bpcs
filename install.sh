@@ -19,8 +19,5 @@ cd ../..
 cd ui
 CGO_ENABLED=1 go install -v
 
-cd $GOPATH
-cp -R src/$GOQT_PATH/bin $CWD
-
-cd $CWD/bpcs
-go build -ldflags "-r ." -o ../bin/stegano-bpcs
+cd $CWD
+go build -ldflags "-r ." -o $GOPATH/bin/stegano-bpcs
