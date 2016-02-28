@@ -1,9 +1,9 @@
 package main
 
 import (
-	"os"
-	"image/png"
+	"github.com/ibrohimislam/stegano-bpcs/engine"
 	"github.com/visualfc/goqt/ui"
+	"os"
 )
 
 type EmbedForm struct {
@@ -33,20 +33,13 @@ func NewEmbedForm() *EmbedForm {
 	exec_button.OnClicked(func() {
 		key := key_textbox.Text()
 		msg := msg_textbox.Text()
-		img_path := "/home/ibrohim/Pictures/vm.png" //img_path_textbox.Text()
+		inp_path := "/home/ibrohim/Pictures/vm.png"     //img_path_textbox.Text()
 		out_path := "/home/ibrohim/Pictures/vm_new.png" //out_path_textbox.Text()
 
-		img_file, err := os.Open(img_path)
+		inp_file, err := os.Open(inp_path)
 		if err != nil {
 			panic(err.Error())
 		}
-
-		img, err := png.Decode(img_file)
-		if err != nil {
-			panic(err.Error())
-		}
-
-		stego_image := Encrypt(img, key, msg)
 
 		out_file, err := os.Create(out_path)
 		if err != nil {
@@ -54,10 +47,10 @@ func NewEmbedForm() *EmbedForm {
 		}
 		defer out_file.Close()
 
-		err = png.Encode(out_file, stego_image)
-		if err != nil {
-			panic(err.Error())
-		}
+		encryptor := engine.Caesar{}
+
+		bpcs := engine.Bpcs{inp_file, out_file, encryptor}
+		bpcs.Embed(key, msg)
 	})
 	vbox.AddWidget(exec_button)
 
